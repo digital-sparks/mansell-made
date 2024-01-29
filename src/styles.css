@@ -1,0 +1,54 @@
+* {
+    --transition-duration: 350ms;
+    --transition-ease: ease-out;
+}
+
+[split-type] {
+    font-kerning: none;
+}
+
+.button .icon-star {
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.button .line-horizontal.is-button-black {
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.button:hover .icon-star:first-child {
+    transform: rotateZ(-180deg) scale(1.2);
+}
+
+.button:hover .icon-star:last-child {
+    transform: rotateZ(180deg) scale(1.2);
+}
+
+.button:hover .line-horizontal.is-button-black {
+    transform: scaleX(1);
+}
+
+
+.link_component .line-horizontal {
+    background-color: currentColor;
+}
+
+.work-item_link {
+    display: block;
+}
+
+
+
+.dropdown_component h3, .discover_item h1 {
+    transition: opacity 400ms ease;
+}
+.dropdown_component:hover h3, .discover_item:hover h1 {
+    opacity: 0.6;
+}
+
+.discover_item .icon-star {
+    transition: opacity 400ms ease;
+}
+
+.discover_item:hover .icon-star {
+    opacity: .6;
+}
