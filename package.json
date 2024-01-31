@@ -34,7 +34,9 @@
     "prettier": "^3.1.1"
   },
   "dependencies": {
+    "@finsweet/ts-utils": "^0.40.0",
     "@studio-freight/lenis": "^1.0.34",
+    "clipboard": "^2.0.11",
     "gsap": "^3.12.5",
     "split-type": "^0.3.4",
     "swiper": "^11.0.5"

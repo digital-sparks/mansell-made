@@ -7,6 +7,12 @@ gsap.registerPlugin(CustomEase);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  gsap.from('.hero-text_item-count', {
+    yPercent: 25,
+    opacity: 0,
+    delay: 1.1,
+  });
+
   document.querySelectorAll('.blog_item-wrap').forEach((article) => {
     const animation = gsap
       .timeline()
@@ -15,28 +21,28 @@ window.Webflow.push(() => {
         { scale: 1 },
         {
           scale: 0.95,
-          ease: 'power1.out',
-          duration: 0.3,
+          ease: 'power3.inOut',
+          duration: 0.8,
         }
       )
       .fromTo(
         article.querySelector('img'),
-        { scale: 1 },
+        { scale: 1.15 },
         {
-          scale: 1.05,
-          duration: 0.4,
-          ease: 'power1.out',
+          scale: 1.175,
+          duration: 0.8,
+          ease: 'power3.inOut',
         },
         '<'
       )
       .pause();
 
     article.addEventListener('mouseenter', () => {
-      animation.play();
+      animation.timeScale(1).play();
     });
 
     article.addEventListener('mouseleave', () => {
-      animation.reverse();
+      animation.timeScale(1.25).reverse();
     });
   });
 

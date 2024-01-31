@@ -81,13 +81,13 @@ window.Webflow.push(() => {
   // ————— HOMEPAGE CASE SWIPER ————— //
 
   // ————— CASE STUDY HOVER ————— //
-  gsap.from('.work-swiper_component', {
+  gsap.from('.work-swiper_component .work-item_component img', {
     opacity: 0,
     scrollTrigger: {
       trigger: '.work-swiper_component',
       start: 'top bottom',
       end: 'bottom top',
-      //   markers: true,
+      //   markers: false,
     },
   });
 
@@ -117,7 +117,7 @@ window.Webflow.push(() => {
           start: 'top bottom',
           end: 'bottom top',
           scrub: true,
-          //   markers: true,
+          //   markers: false,
         },
       }
     );
@@ -237,7 +237,7 @@ window.Webflow.push(() => {
   const heroImages = gsap
     .timeline({
       scrollTrigger: {
-        markers: true,
+        markers: false,
         trigger: '.image-parallax_component',
         start: 'top bottom',
         end: 'bottom top',

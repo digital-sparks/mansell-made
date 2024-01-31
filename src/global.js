@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Observer } from 'gsap/Observer';
 import CustomEase from 'gsap/CustomEase';
 import SplitType from 'split-type';
+import ClipboardJS from 'clipboard';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(CustomEase);
@@ -17,8 +18,9 @@ window.Webflow.push(() => {
   // ————— LENIS ————— //
   ('use strict'); // fix lenis in safari
 
+  let lenis;
   if (Webflow.env('editor') === undefined) {
-    let lenis = new Lenis();
+    lenis = new Lenis();
 
     $('[data-lenis-start]').on('click', function () {
       lenis.start();
@@ -44,6 +46,15 @@ window.Webflow.push(() => {
     });
 
     gsap.ticker.lagSmoothing(0);
+
+    // recalculate page height when FAQ dropdown is opened
+    document.querySelectorAll('.dropdown_component').forEach((dropdown) => {
+      dropdown.addEventListener('click', () => {
+        setTimeout(() => {
+          lenis.resize();
+        }, 750); // timeout value is set to faq interaction duration
+      });
+    });
   }
   // ————— LENIS ————— //
 
@@ -190,9 +201,9 @@ window.Webflow.push(() => {
 
     timeline
       .from(element.querySelectorAll('.line-horizontal'), {
-        duration: 1.6,
+        duration: 2,
         scaleX: 0,
-        ease: 'quart.out',
+        ease: 'ease.in',
       })
       .from(
         element.querySelectorAll('.icon-star'),
@@ -201,171 +212,18 @@ window.Webflow.push(() => {
           opacity: 0,
           scale: 1.5,
         },
-        '>-0.2'
+        '<'
       );
   });
 
   // ————— DIVIDER COMPONENT ————— //
 
-  // ————— NAV MENU ————— //
-
-  let menuAnimation = gsap.timeline({});
-  let menuLinks = document.querySelectorAll('.nav_open-link');
-  //   let menuDetails = document.querySelectorAll('[data-menu-stagger]');
-  let menuWrap = document.querySelector('.nav_open');
-  //   let menuBg = document.querySelector('.menu-bg');
-  let isOpen = false;
-
-  let menuOpen = () => {
-    isOpen = true;
-    menuAnimation.clear();
-    menuAnimation.progress(0);
-    menuAnimation
-      .set(menuWrap, { display: 'flex' })
-      //   .fromTo(menuBg, { scaleY: 0 }, { scaleY: 1, ease: 'expo.out', duration: 1 })
-      .fromTo(
-        menuLinks,
-        {
-          opacity: 0,
-          yPercent: 50,
-        },
-        {
-          opacity: 1,
-          yPercent: 0,
-          duration: 0.6,
-          ease: 'expo.out',
-
-          stagger: { each: 0.1, from: 'start' },
-        },
-        0.6
-      );
-    //   .fromTo(
-    //     menuDetails,
-    //     {
-    //       opacity: 0,
-    //       yPercent: 50,
-    //     },
-    //     {
-    //       opacity: 1,
-    //       yPercent: 0,
-    //       duration: 0.6,
-    //       ease: 'expo.out',
-    //       stagger: { each: 0.05, from: 'start' },
-    //     },
-    //     '<'
-    //   );
-  };
-
-  let menuClose = () => {
-    menuAnimation.clear();
-    menuAnimation.progress(0);
-    menuAnimation
-      .to(menuLinks, {
-        opacity: 0,
-        yPercent: 50,
-        duration: 0.4,
-        ease: 'power4.out',
-        stagger: { each: 0.05, from: 'end' },
-      })
-      //   .to(
-      //     menuDetails,
-      //     {
-      //       opacity: 0,
-      //       yPercent: 50,
-      //       duration: 0.4,
-      //       ease: 'power4.out',
-      //       stagger: { each: 0.05, from: 'start' },
-      //     },
-      //     0
-      //   )
-      //   .to(menuBg, { scaleY: 0, ease: 'expo.out', duration: 0.8 }, '<+=0.4')
-      .set(menuWrap, { display: 'none' });
-  };
-
-  document.querySelector('.nav_menu-button').addEventListener('click', () => {
-    if (isOpen) {
-      menuClose();
-    } else {
-      menuOpen();
-    }
-  });
-
-  // ————— NAV MENU ————— //
-
   CustomEase.create('linkUnderline', '1, 0, .25, 1');
   const linkUnderlineDuration = 0.6;
 
-  //   document.querySelectorAll('.link_component.is-line-initial-visible').forEach((link) => {
-  //     const underline = link.querySelector('.line-horizontal');
-  //     let tween;
-
-  //     const textPre = new SplitType(link.querySelector('.text-size-regular'), {
-  //       types: 'chars',
-  //       tagName: 'span',
-  //     });
-  //     const textPost = new SplitType(link.querySelectorAll('.text-size-regular')[1], {
-  //       types: 'chars',
-  //       tagName: 'span',
-  //     });
-  //     const animation = gsap
-  //       .timeline()
-  //       .to(textPre.chars, {
-  //         yPercent: -100,
-  //         stagger: 0.02,
-  //         duration: 1,
-  //         ease: 'button',
-  //       })
-  //       .to(
-  //         textPost.chars,
-  //         {
-  //           yPercent: -100,
-  //           stagger: 0.02,
-  //           duration: 1,
-  //           ease: 'button',
-  //         },
-  //         '<'
-  //       )
-  //       .pause();
-
-  //     link.addEventListener('mouseenter', () => {
-  //       tween = gsap.fromTo(
-  //         underline,
-  //         {
-  //           xPercent: 0,
-  //         },
-  //         {
-  //           xPercent: 100,
-  //           duration: linkUnderlineDuration,
-  //           ease: 'linkUnderline',
-  //           overwrite: false,
-  //         }
-  //       );
-  //       animation.play();
-  //     });
-  //     link.addEventListener('mouseleave', () => {
-  //       const reverseInterval = setInterval(function () {
-  //         if (!tween.isActive()) {
-  //           clearInterval(reverseInterval);
-  //           gsap.fromTo(
-  //             underline,
-  //             {
-  //               xPercent: -100,
-  //             },
-  //             {
-  //               xPercent: 0,
-  //               duration: linkUnderlineDuration,
-  //               ease: 'linkUnderline',
-  //               overwrite: false,
-  //             }
-  //           );
-  //           animation.reverse();
-  //         }
-  //       }, 10);
-  //     });
-  //   });
-
   document.querySelectorAll('.link_component').forEach((link) => {
     const hideLineByDefault = link.classList.contains('is-line-initial-left');
+    const isMenuButton = link.classList.contains('is-menu');
 
     const underline = link.querySelector('.line-horizontal');
     let tween;
@@ -378,8 +236,8 @@ window.Webflow.push(() => {
       types: 'chars',
       tagName: 'span',
     });
-    const animation = gsap
-      .timeline()
+    const letterAnimation = gsap
+      .timeline({})
       .to(textPre.chars, {
         yPercent: -100,
         stagger: 0.02,
@@ -398,32 +256,40 @@ window.Webflow.push(() => {
       )
       .pause();
 
+    let lineAnimation = gsap.set(underline, {});
+
     link.addEventListener('mouseenter', () => {
-      tween = gsap.fromTo(
-        underline,
-        {
-          x: hideLineByDefault ? '-100%' : '0%',
-        },
-        {
-          x: hideLineByDefault ? '0%' : '100%',
-          duration: linkUnderlineDuration,
-          ease: 'linkUnderline',
+      if (!letterAnimation.isActive()) letterAnimation.seek(0);
+      if (!isMenuButton) letterAnimation.play();
+      const reverseInterval = setInterval(function () {
+        if (!lineAnimation.isActive()) {
+          clearInterval(reverseInterval);
+          lineAnimation = gsap.fromTo(
+            underline,
+            {
+              x: hideLineByDefault ? '-100%' : '0%',
+            },
+            {
+              x: hideLineByDefault ? '0%' : '100%',
+              duration: linkUnderlineDuration,
+              ease: 'linkUnderline',
+            }
+          );
         }
-      );
-      animation.play();
+      }, 10);
     });
     link.addEventListener('mouseleave', () => {
       const reverseInterval = setInterval(function () {
-        if (!tween.isActive()) {
+        if (!lineAnimation.isActive()) {
           clearInterval(reverseInterval);
           if (hideLineByDefault) {
-            gsap.to(underline, {
+            lineAnimation = gsap.to(underline, {
               x: '100%',
               duration: linkUnderlineDuration,
               ease: 'linkUnderline',
             });
           } else {
-            gsap.fromTo(
+            lineAnimation = gsap.fromTo(
               underline,
               {
                 x: '-100%',
@@ -437,10 +303,200 @@ window.Webflow.push(() => {
             );
           }
         }
-        animation.reverse();
       }, 10);
     });
   });
+
+  // ————— NAV MENU ————— //
+
+  document.querySelectorAll('.nav_open-link').forEach((navLink) => {
+    const horizontalLineLeft = navLink.previousSibling;
+    const horizontalLineRight = navLink.nextSibling;
+    const text = new SplitType(navLink, {
+      types: 'chars',
+      tagName: 'span',
+    });
+
+    gsap.set([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
+
+    navLink.addEventListener('mouseenter', () => {
+      gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 1 });
+      gsap.to(text.chars, {
+        duration: 0.4,
+        ease: 'ease.out',
+        xPercent: (index, target, targets) => {
+          let centerIndex = Math.floor(targets.length / 2);
+          let movePercentage;
+          const percentage = 2;
+
+          if (index < centerIndex) {
+            movePercentage = -percentage * Math.abs(index - centerIndex);
+          } else if (index > centerIndex) {
+            movePercentage = percentage * Math.abs(index - centerIndex);
+          } else {
+            movePercentage = 0;
+          }
+
+          return movePercentage;
+        },
+      });
+    });
+    navLink.addEventListener('mouseleave', () => {
+      gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
+      gsap.to(text.chars, {
+        xPercent: 0,
+      });
+    });
+  });
+
+  let menuAnimation = gsap.timeline({});
+  const menuLinks = document.querySelectorAll('.nav_open-link-wrap');
+  const menuDetails = document.querySelectorAll('.nav_bottom_item');
+  const menuWrap = document.querySelector('.nav_open');
+  const menuBg = document.querySelector('.menu-bg');
+  let isOpen = false;
+
+  const menuLinkTextPre = new SplitType(
+    document.querySelectorAll('.link_component.is-menu .text-size-regular')[0],
+    {
+      types: 'chars',
+      tagName: 'span',
+    }
+  );
+  const menuLinkTextPost = new SplitType(
+    document.querySelectorAll('.link_component.is-menu .text-size-regular')[1],
+    {
+      types: 'chars',
+      tagName: 'span',
+    }
+  );
+
+  console.log(menuLinkTextPre);
+  console.log(menuLinkTextPost);
+
+  const menuLinkTextAnimation = gsap
+    .timeline({})
+    .to(menuLinkTextPre.chars, {
+      yPercent: -100,
+      stagger: 0.02,
+      duration: 1,
+      ease: 'button',
+    })
+    .to(
+      menuLinkTextPost.chars,
+      {
+        yPercent: -100,
+        stagger: 0.02,
+        duration: 1,
+        ease: 'button',
+      },
+      '<'
+    )
+    .pause();
+
+  let menuOpen = () => {
+    isOpen = true;
+
+    menuLinkTextAnimation.play();
+
+    menuAnimation.clear();
+    menuAnimation.progress(0);
+    menuAnimation
+      .set(menuWrap, { display: 'flex' })
+      .fromTo(
+        menuWrap,
+        { height: 0 },
+        { height: 'auto', ease: 'power2.inOut', duration: 1, transformOrigin: 'center top' }
+      )
+      .fromTo(
+        menuLinks,
+        {
+          opacity: 0,
+          yPercent: 20,
+          rotateZ: 1,
+        },
+        {
+          opacity: 1,
+          yPercent: 0,
+          rotateZ: 0,
+          duration: 0.6,
+          ease: 'power1.out',
+          stagger: { each: 0.1, from: 'start' },
+        },
+        '<+0.9'
+      )
+      .fromTo(
+        menuDetails,
+        {
+          opacity: 0,
+          yPercent: 50,
+          rotateZ: 1,
+        },
+        {
+          rotateZ: 0,
+          opacity: 1,
+          yPercent: 0,
+          duration: 0.8,
+          ease: 'power1.out',
+          stagger: { each: 0.05, from: 'start' },
+        },
+        '<+0.6'
+      );
+  };
+
+  let menuClose = () => {
+    menuLinkTextAnimation.reverse();
+
+    menuAnimation.clear();
+    menuAnimation.progress(0);
+    menuAnimation
+      .to(menuLinks, {
+        opacity: 0,
+        yPercent: 20,
+        duration: 0.2,
+        ease: 'power1.out',
+        stagger: { each: 0.1, from: 'end' },
+      })
+      .to(
+        menuDetails,
+        {
+          opacity: 0,
+          yPercent: 25,
+          duration: 0.3,
+          ease: 'power1.out',
+          stagger: { each: 0.01, from: 'start' },
+        },
+        0
+      )
+      .to(
+        menuWrap,
+        {
+          height: 0,
+          ease: 'power2.inOut',
+          duration: 0.8,
+        },
+        '<+0.7'
+      )
+      .set(menuWrap, {
+        display: 'none',
+        onComplete: () => {
+          isOpen = false;
+        },
+      });
+  };
+
+  document.querySelector('.nav_menu-button').addEventListener('click', () => {
+    if (isOpen) {
+      menuClose();
+      lenis.start();
+    } else {
+      menuOpen();
+      lenis.stop();
+    }
+  });
+
+  // ————— NAV MENU ————— //
+
   // ————— NAV MENU ————— //
 
   // ————— GlOBAL IMAGE PARALLAX EFFECT ————— //
@@ -455,7 +511,7 @@ window.Webflow.push(() => {
         trigger: image.parentNode,
         start: '10% bottom',
         end: 'bottom top',
-        markers: true,
+        markers: false,
         toggleActions: 'play none resume reverse',
       },
     });
@@ -511,11 +567,8 @@ window.Webflow.push(() => {
       .pause();
 
     button.addEventListener('mouseenter', () => {
-      animation.seek(0);
+      if (!animation.isActive()) animation.seek(0);
       animation.play();
-    });
-    button.addEventListener('mouseleave', () => {
-      //   animation.reverse();
     });
   });
 
@@ -530,8 +583,8 @@ window.Webflow.push(() => {
           trigger: item,
           start: 'bottom 90%',
           end: 'bottom top',
-          markers: true,
-          toggleActions: 'play none resume reverse',
+          markers: false,
+          toggleActions: 'play none none reverse',
         },
       })
       //   .from(text.words, {
@@ -546,7 +599,7 @@ window.Webflow.push(() => {
         opacity: 0,
         stagger: 0.01,
         ease: 'power2.out',
-        duration: 0.8,
+        duration: 1.2,
         delay: 0.4,
       })
       .from(
@@ -605,78 +658,54 @@ window.Webflow.push(() => {
     },
   });
 
-  //   animateStars.to('.star-heading_component .icon-star', {
-  //     rotateZ: 360,
-  //     repeat: -1,
-  //     ease: 'linear',
-  //     duration: 200,
-  //     scrollTrigger: {
-  //       trigger: '.page-wrapper',
-  //       start: 'top 90%',
-  //       end: 'bottom 10%',
-  //       scrub: true,
-  //       markers: false,
-  //     },
-  //   });
+  gsap.from('.heading-size-xxlarge.is-footer', {
+    scale: 0.965,
+    duration: 1.4,
+    yPercent: 2,
+    transformOrigin: (index) => {
+      return index % 2 ? 'center top' : 'center bottom';
+    },
+    ease: 'power1.out',
+    scrollTrigger: {
+      scrub: true,
+      trigger: '.center-card_component',
+      start: 'top bottom',
+      end: 'bottom top',
+      toggleActions: 'play none none reverse',
+    },
+  });
 
-  document.querySelector('.pre-footer_component .center-card_component').style.display = 'none';
-
-  const footerText = new SplitType(
-    document.querySelectorAll('.pre-footer_component .heading-size-xxlarge'),
-    {
-      types: 'chars',
-      tagName: 'span',
-    }
-  );
-
-  const footerTimeline = gsap
+  gsap
     .timeline({
       scrollTrigger: {
+        trigger: '.center-card_component',
+        start: '25% bottom',
+        toggleActions: 'play none none reverse',
         markers: false,
-        trigger: '.pre-footer_component',
-        start: 'center bottom',
-        toggleActions: 'play none resume reverse',
       },
     })
-    // .from(footerText.chars, {
-    //   yPercent: 80,
-    //   rotateZ: 10,
-    //   opacity: 0,
-    //   stagger: 0.05,
-    //   ease: 'power1.inOut',
-    // })
-    // .from(footerText.chars, {
-    //   duration: 1.2,
-    //   rotateZ: 1,
-    //   rotateX: 40,
-    //   rotateY: 20,
-    //   yPercent: 12,
-    //   transformOrigin: 'left bottom',
-    //   opacity: 0,
-    //   delay: 0.5,
-    //   //   ease: 'power1.out',
-    //   stagger: 0.04,
-    //   ease: CustomEase.create(
-    //     'custom',
-    //     'M0,0 C0.126,0.382 0.373,0.954 0.569,1.035 0.792,1.126 0.818,1.001 1,1 '
-    //   ),
-    // })
-    .fromTo(
-      '.pre-footer_component .center-card_component',
+    .from(
+      '.pre-footer_component .overlay-full',
       {
-        display: 'none',
+        bottom: '100%',
+        duration: 1,
+        ease: 'power1.out',
+      },
+      '<'
+    )
+    .from(
+      ['.pre-footer_component .center-card_button', '.pre-footer_component .heading-size-medium'],
+      {
         opacity: 0,
+        duration: 1,
+        y: '0.25rem',
+        scale: 0.99,
+        ease: 'ease.out',
       },
-      {
-        display: 'block',
-        opacity: 1,
-        ease: 'power1.inOut',
-      },
-      '<+0.4'
+      '<+0.8'
     );
 
-  //   gsap.to('.pre-footer_component heading-size-xxlarge');
-
+  // logo slider marquee
   document.querySelectorAll('.logos_component').forEach((item) => {
     item.querySelector('.logos_wrapper').append(item.querySelector('.logos_list').cloneNode(true));
     item.querySelector('.logos_wrapper').append(item.querySelector('.logos_list').cloneNode(true));
@@ -719,12 +748,13 @@ window.Webflow.push(() => {
       heading = new SplitType(dropdown.querySelector('.text-size-regular'), {
         types: 'words, chars',
         tagName: 'span',
-      });
+      }),
+      answerList = dropdown.querySelector('.dropdown_list');
 
     const animation = gsap
       .timeline({
         scrollTrigger: {
-          markers: true,
+          markers: false,
           trigger: dropdown,
           start: 'top bottom',
           end: 'bottom top',
@@ -745,8 +775,10 @@ window.Webflow.push(() => {
           delay: 0.25,
           ease: 'ease.out',
           transformOrigin: 'left',
-        }
+        },
+        '<'
       )
+
       .fromTo(
         heading.words,
         {
@@ -763,6 +795,15 @@ window.Webflow.push(() => {
           duration: 0.8,
         },
         '<+0.2'
+      )
+      .from(answerList, { delay: 0.2, duration: 1.2, opacity: 0 }, '<')
+      .from(
+        icon,
+        {
+          duration: 1,
+          opacity: 0,
+        },
+        '>-0.2'
       );
 
     dropdown.addEventListener('mouseenter', () => {
@@ -791,7 +832,7 @@ window.Webflow.push(() => {
         start: 'top bottom',
         end: 'bottom top',
         markers: false,
-        toggleActions: 'play none resume reverse',
+        toggleActions: 'play none none none',
       },
       duration: 1.2,
       rotateZ: 1,
@@ -821,7 +862,7 @@ window.Webflow.push(() => {
         markers: false,
         trigger: line,
         start: 'bottom 95%',
-        toggleActions: 'play none resume reverse',
+        toggleActions: 'play none none none',
       },
     });
   });
@@ -840,7 +881,7 @@ window.Webflow.push(() => {
         markers: false,
         trigger: h1SplitText.elements,
         start: 'bottom bottom',
-        toggleActions: 'play none resume reverse',
+        toggleActions: 'play none none none',
       },
     });
   });
@@ -850,24 +891,192 @@ window.Webflow.push(() => {
 
     gsap
       .timeline()
+
       .to(preloader.querySelectorAll('.preloader_panel'), {
         delay: 0,
         scaleY: 0,
         transformOrigin: function (index, target, targets) {
-          console.log(index, target, targets);
-          console.log(index % 2);
           return index % 2 ? 'center bottom' : 'center top';
         },
         stagger: {
-          grid: [5, 2],
-          each: 0.05,
-          //   from: 'center',
+          each: 0.01,
+          from: 'center',
         },
-        duration: 2,
+        duration: 1.6,
+        ease: 'power3.inOut',
       })
-      .to(preloader, {
+      .to(
+        preloader.querySelector('.preloader_absolute'),
+        {
+          opacity: 0,
+          delay: 0.6,
+        },
+        '<'
+      )
+      .set(preloader, {
         opacity: 0,
         display: 'none',
       });
   });
+
+  document.querySelectorAll('a').forEach(function (anchor) {
+    anchor.addEventListener('click', function (e) {
+      if (
+        this.hostname === window.location.host &&
+        this.getAttribute('href').indexOf('#') === -1 &&
+        this.getAttribute('target') !== '_blank'
+      ) {
+        e.preventDefault();
+        const destination = this.getAttribute('href');
+        const preloader = document.querySelector('.preloader_component');
+        const panels = preloader.querySelectorAll('.preloader_panel');
+
+        gsap.set(preloader, { opacity: 1, display: 'flex' });
+        gsap.to(panels, {
+          scaleY: 1,
+          transformOrigin: function (index, target, targets) {
+            return index % 2 ? 'center bottom' : 'center top';
+          },
+          stagger: {
+            each: 0.01,
+            from: 'center',
+          },
+          duration: 1.6,
+          ease: 'power3.inOut',
+          onComplete: () => {
+            window.location = destination;
+          },
+        });
+        gsap.to(preloader.querySelector('.preloader_absolute'), {
+          opacity: 1,
+          delay: 0.8,
+        });
+      }
+    });
+  });
+
+  // On click of the back button
+  window.onpageshow = function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  };
+
+  const contactCard = document.querySelector('.center-card_component');
+  const contactCardButton = contactCard.querySelector('.center-card_button');
+  let isCopied = false;
+
+  const contactCardAnimation = gsap
+    .timeline({
+      defaults: { duration: 0.5, ease: 'power1.inOut' },
+    })
+    .to(contactCardButton.querySelectorAll('div')[0], {
+      yPercent: -100,
+    })
+    .to(
+      contactCardButton.querySelectorAll('div')[1],
+      {
+        yPercent: -100,
+      },
+      '<'
+    )
+    .to(contactCardButton.querySelectorAll('div')[1], {
+      yPercent: -200,
+    })
+    .to(
+      contactCardButton.querySelectorAll('div')[2],
+      {
+        yPercent: -100,
+      },
+      '<'
+    )
+    .to(contactCardButton.querySelectorAll('div')[2], {
+      yPercent: -200,
+    })
+    .to(
+      contactCardButton.querySelectorAll('div')[3],
+      {
+        yPercent: -100,
+      },
+      '<'
+    )
+    .pause();
+
+  let clipboard = new ClipboardJS(contactCard);
+  clipboard.on('success', function (e) {
+    contactCardAnimation.tweenTo(1);
+    isCopied = true;
+    setTimeout(() => {
+      contactCardAnimation.tweenTo(1.5, {
+        onComplete: () => {
+          contactCardAnimation.seek(0);
+        },
+      });
+      isCopied = false;
+    }, 2000);
+  });
+
+  contactCard.addEventListener('mouseenter', (element) => {
+    if (!isCopied) contactCardAnimation.tweenFromTo(0, 0.5);
+    gsap.to(contactCard, { scale: 1.01, ease: 'power1.out', duration: 0.4 });
+  });
+
+  contactCard.addEventListener('mouseleave', (element) => {
+    if (!isCopied) contactCardAnimation.reverse();
+    gsap.to(contactCard, { scale: 1, ease: 'power1.out', duration: 0.2 });
+  });
+
+  // open dropdown on page load
+  const identifier = sessionStorage['fc-dropdown-toggle'];
+
+  if (identifier !== undefined) {
+    const toggles = document.querySelectorAll('[fc-dropdown-toggle]');
+    let toggleIdentifiers = [];
+    for (const toggle of toggles) toggleIdentifiers.push(toggle.getAttribute('fc-dropdown-toggle'));
+
+    for (let i = 0; i < toggleIdentifiers.length; i++) {
+      if (identifier === toggleIdentifiers[i]) {
+        const toggleToTrigger = toggles[i];
+        toggleToTrigger.dispatchEvent(new Event('mousedown'));
+        toggleToTrigger.dispatchEvent(new Event('mouseup'));
+
+        $(toggleToTrigger).trigger('tap');
+      }
+    }
+  } else {
+    const dropdowns = document.querySelectorAll('[fc-dropdown = default]');
+
+    if (dropdowns.length === 1) {
+      const dropdown = dropdowns[0];
+      const dropdownToggle = dropdown.querySelector('.w-dropdown-toggle');
+
+      dropdownToggle.dispatchEvent(new Event('mousedown'));
+      dropdownToggle.dispatchEvent(new Event('mouseup'));
+
+      $(dropdownToggle).trigger('tap');
+    } else if (dropdowns.length > 1) {
+      let options = {
+        threshold: 0,
+      };
+
+      let callback = (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const dropdownToggle = entry.target.querySelector('.w-dropdown-toggle');
+
+            if (!dropdownToggle.classList.contains('w--open')) {
+              dropdownToggle.dispatchEvent(new Event('mousedown'));
+              dropdownToggle.dispatchEvent(new Event('mouseup'));
+
+              $(dropdownToggle).trigger('tap');
+            }
+          }
+        });
+      };
+
+      let observer = new IntersectionObserver(callback, options);
+
+      for (const dropdown of dropdowns) observer.observe(dropdown);
+    }
+  }
 });

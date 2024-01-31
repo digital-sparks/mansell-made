@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  // hero image
+  // hero image parallax
   gsap.to(document.querySelector('.full-screen-hero_component img'), {
     yPercent: 20,
     filter: 'blur(5px)',
@@ -16,26 +16,11 @@ window.Webflow.push(() => {
       start: 'bottom bottom',
       end: 'bottom top',
       scrub: true,
-      markers: true,
+      markers: false,
     },
   });
 
-  const h1 = splitText(document.querySelector('h1'));
-  gsap.from(h1.chars, {
-    yPercent: 100,
-    opacity: 0,
-    delay: 0.4,
-    rotationZ: 15,
-    duration: 0.45,
-    ease: 'quart.out',
-    stagger: 0.05,
-    scrollTrigger: {
-      trigger: h1.elements,
-      start: 'top bottom',
-      end: 'bottom top',
-    },
-  });
-
+  // star + section number animation
   document.querySelectorAll('.case-study_number-wrap').forEach((item) => {
     const text = new SplitType(item.querySelector('.heading-size-xsmall'), {
       types: 'chars, words',
@@ -47,7 +32,7 @@ window.Webflow.push(() => {
           trigger: item,
           start: 'top bottom',
           end: 'bottom top',
-          markers: true,
+          markers: false,
           toggleActions: 'play none resume reverse',
         },
       })
@@ -68,27 +53,18 @@ window.Webflow.push(() => {
       );
   });
 
-  //   document.querySelectorAll('.case-study_number-wrap').forEach((item) => {
-  //     const number = splitText(item.querySelector('.heading-size-xsmall'));
-  //     console.log(number);
-  //     gsap.from(number.chars, {
-  //       yPercent: 100,
-  //       opacity: 0,
-  //       //   rotationZ: '5',
-  //       duration: 0.3,
-  //       ease: 'quart.out',
-  //       stagger: 0.3,
-  //       scrollTrigger: {
-  //         trigger: number.elements,
-  //         start: 'top bottom',
-  //         end: 'bottom top',
-  //         //   markers: true,
-  //       },
-  //     });
-  //   });
-
-  function splitText(element) {
-    const splitOptions = element.getAttribute('split-type');
-    return new SplitType(element, { types: splitOptions, tagName: 'span' });
-  }
+  // next project animation
+  gsap.from('.next-project_component .heading-size-small', {
+    yPercent: 25,
+    duration: 0.6,
+    opacity: 0,
+    ease: 'power1.out',
+    delay: 1.1,
+    scrollTrigger: {
+      markers: false,
+      trigger: '.next-project_component',
+      start: '5% bottom',
+      end: 'bottom top',
+    },
+  });
 });

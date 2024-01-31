@@ -8,19 +8,24 @@ gsap.registerPlugin(CustomEase);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  $('.contact_wrap .button').click(function () {
-    $('.form_submit')[0].click();
-  });
+  // header button and paragagraph
+  gsap.from(
+    [
+      document.querySelector('.hero-text_component.is-contact a'),
+      document.querySelector('.hero-text_component.is-contact .hero-contact_paragraph'),
+    ],
+    {
+      opacity: 0,
+      rotateZ: 0.5,
+      y: '0.5rem',
+      duration: 0.8,
+      ease: 'power1.out',
+      delay: 1.6,
+      stagger: 0.15,
+    }
+  );
 
-  $('textarea')
-    .each(function () {
-      this.setAttribute('style', 'height:' + this.scrollHeight + 'px;overflow-y:hidden;');
-    })
-    .on('input', function () {
-      this.style.height = 0;
-      this.style.height = this.scrollHeight + 'px';
-    });
-
+  // contact card animation
   let contactComponent = gsap
     .timeline({
       scrollTrigger: {
@@ -28,7 +33,7 @@ window.Webflow.push(() => {
         start: '15% bottom',
         end: '85% top',
         // scrub: true,
-        markers: true,
+        markers: false,
         toggleActions: 'play none resume reverse',
       },
     })
@@ -46,8 +51,8 @@ window.Webflow.push(() => {
       {
         yPercent: 125,
         stagger: 0.05,
-        delay: 0.1,
-        ease: 'ease.out',
+        delay: 0.3,
+        ease: 'power1.out',
         duration: 1.2,
       },
       '<'
@@ -63,4 +68,19 @@ window.Webflow.push(() => {
       },
       '<'
     );
+
+  // fake form submit
+  $('.contact_wrap .button').click(function () {
+    $('.form_submit')[0].click();
+  });
+
+  //expand text area on input
+  $('textarea')
+    .each(function () {
+      this.setAttribute('style', 'height:' + this.scrollHeight + 'px;overflow-y:hidden;');
+    })
+    .on('input', function () {
+      this.style.height = 0;
+      this.style.height = this.scrollHeight + 'px';
+    });
 });

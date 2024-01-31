@@ -5,6 +5,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  gsap.from('.hero-text_item-count', {
+    yPercent: 25,
+    opacity: 0,
+    delay: 1.1,
+  });
+
   function itemsCount() {
     let renderCount = document.querySelector('.work_list').childElementCount;
     let countEl = document.querySelector('.hero-text_item-count');
@@ -51,7 +57,7 @@ window.Webflow.push(() => {
           start: 'top bottom',
           end: 'bottom top',
           scrub: true,
-          //   markers: true,
+          //   markers: false,
         },
       }
     );
