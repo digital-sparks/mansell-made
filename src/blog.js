@@ -1,18 +1,11 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CustomEase } from 'gsap/all';
 
 gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(CustomEase);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  gsap.from('.hero-text_item-count', {
-    yPercent: 25,
-    opacity: 0,
-    delay: 1.1,
-  });
-
+  // ————— BLOG THUMB HOVER ————— //
   document.querySelectorAll('.blog_item-wrap').forEach((article) => {
     const animation = gsap
       .timeline()
@@ -22,7 +15,7 @@ window.Webflow.push(() => {
         {
           scale: 0.95,
           ease: 'power3.inOut',
-          duration: 0.8,
+          duration: 0.6,
         }
       )
       .fromTo(
@@ -30,7 +23,7 @@ window.Webflow.push(() => {
         { scale: 1.15 },
         {
           scale: 1.175,
-          duration: 0.8,
+          duration: 0.6,
           ease: 'power3.inOut',
         },
         '<'
@@ -45,29 +38,21 @@ window.Webflow.push(() => {
       animation.timeScale(1.25).reverse();
     });
   });
+  // ————— BLOG THUMB HOVER ————— //
 
-  function itemsCount() {
-    let renderCount = document.querySelector('.blog_list').childElementCount;
-    let countEl = document.querySelector('.hero-text_item-count');
-    if (renderCount < 10) {
-      renderCount = '0' + renderCount;
-    }
-    countEl.textContent = renderCount;
-  }
-
-  itemsCount();
-
+  // ————— FINSWEET RENDER ITEMS ————— //
   window.fsAttributes = window.fsAttributes || [];
   window.fsAttributes.push([
     'cmsfilter',
     (filterInstances) => {
-      console.log('cmsfilter Successfully loaded!');
-
       const [filterInstance] = filterInstances;
 
       filterInstance.listInstance.on('renderitems', (renderedItems) => {
-        itemsCount();
+        let renderCount = document.querySelector('.blog_list').childElementCount;
+        let countEl = document.querySelector('.hero-text_item-count');
+        countEl.textContent = renderCount < 10 ? '0' + renderCount : renderCount;
       });
     },
   ]);
+  // ————— FINSWEET RENDER ITEMS ————— //
 });

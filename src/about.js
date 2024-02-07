@@ -5,15 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  gsap.from('.full-screen-hero_component .heading-size-xsmall', {
-    yPercent: 50,
-    opacity: 0,
-    delay: 1.6,
-    rotateZ: -1,
-    duration: 0.8,
-    ease: 'ease.out',
-  });
-
+  // ————— HERO IMAGE Y PARALLAX ————— //
   gsap.to(document.querySelector('.full-screen-hero_component img'), {
     yPercent: 20,
     filter: 'blur(5px)',
@@ -26,4 +18,5 @@ window.Webflow.push(() => {
       markers: false,
     },
   });
+  // ————— HERO IMAGE Y PARALLAX ————— //
 });

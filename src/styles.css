@@ -1,8 +1,24 @@
+/* custom variables and global styles */
 * {
-    --transition-duration: 350ms;
-    --transition-ease: ease-out;
+    --transition-button-duration: 600ms;
+    --transition-button-style: cubic-bezier(.5, 0, .25, 1);
 }
 
+.link_component .line-horizontal {
+    background-color: currentColor;
+}
+
+.work-item_link, .blog_item-link {
+    display: block;
+}
+
+.preloader_component {
+    display: flex;
+}
+
+/* custom variables and global styles */
+
+/* lenis and split-type styles */
 html.lenis {
     height: auto;
 }
@@ -23,16 +39,16 @@ html.lenis {
     pointer-events: none;
 }
 
-[split-type] {
-    font-kerning: none;
-}
+/* lenis and split-type styles */
 
+
+/* button hover styles */
 .button .icon-star {
-    transition: transform var(--transition-duration) var(--transition-ease);
+    transition: transform var(--transition-button-duration) var(--transition-button-style);
 }
 
 .button .line-horizontal.is-button-black {
-    transition: transform var(--transition-duration) var(--transition-ease);
+    transition: transform var(--transition-button-duration) var(--transition-button-style);
 }
 
 .button:hover .icon-star:first-child {
@@ -46,15 +62,10 @@ html.lenis {
 .button:hover .line-horizontal.is-button-black {
     transform: scaleX(1);
 }
+/* button hover styles */
 
 
-.link_component .line-horizontal {
-    background-color: currentColor;
-}
-
-.work-item_link {
-    display: block;
-}
+/* FAQ styles */
 
 .dropdown_component h3, .discover_item h1 {
     transition: opacity 400ms ease;
@@ -72,22 +83,18 @@ html.lenis {
 
 }
 
-.preloader_component {
-    display: flex;
-}
+/* FAQ styles */
 
-/* .preloader_panel {
-    background-color:white;
-} */
 
+/* Footer card styles */
 
 .center-card_button_line {
     background-color: currentColor;
-    transition: transform 400ms var(--transition-ease);
+    transition: transform 300ms var(--transition-button-style);
 }
 
 .center-card_button {
-    transition: color 400ms var(--transition-ease);
+    transition: color 300ms var(--transition-button-style);
 }
 
 .center-card_component:hover .center-card_button {
@@ -98,10 +105,15 @@ html.lenis {
     transform: scaleX(1);
 }
 
+/* Footer card styles */
+
+
+/* Work and article hover styles */
+
 .work-item_component.is-next-project .heading-size-small,
 .blog_item h1 {
-    transition: text-decoration-color 300ms ease-out, color 300ms ease-out;
-    transition-delay: 400ms;
+    transition: text-decoration-color 250ms ease-out, color 250ms ease-out;
+    transition-delay: 250ms;
     text-decoration: underline;
     text-underline-offset: 0.2em;
     text-decoration-thickness: .085em;
@@ -116,3 +128,18 @@ html.lenis {
 .blog_item:hover h1 {
     text-decoration-color: var(--text-color--text-grey-medium);
 }
+
+/* Work and article hover styles */
+
+
+/* nav_open-link is current page */ 
+
+.nav_open-link-wrap.w--current .nav_open-link {
+    color: var(--text-color--text-primary)!important;
+}
+
+.nav_open-link-wrap.w--current .line-horizontal {
+    transform: scale(1, 1)!important;
+}
+
+/* nav_open-link is current page */

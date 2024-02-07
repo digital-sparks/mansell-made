@@ -2,14 +2,54 @@ import Swiper from 'swiper';
 import { Keyboard, Parallax } from 'swiper/modules';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CustomEase } from 'gsap/all';
-import SplitType from 'split-type';
 
 gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(CustomEase);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  // ————— HERO IMAGES PARALLAX ————— //
+  let matchMedia = gsap.matchMedia();
+  matchMedia.add('(min-width: 768px)', () => {
+    const heroImagesParallax = gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: '.image-parallax_component',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+      .fromTo(
+        '.image-parallax_wrap.is-1',
+        {
+          yPercent: 0,
+          ease: 'none',
+        },
+        {
+          yPercent: -15,
+          ease: 'none',
+        },
+        '<'
+      )
+      .to(
+        '.image-parallax_wrap.is-2',
+        {
+          yPercent: 2,
+          ease: 'none',
+        },
+        '<'
+      )
+      .to(
+        '.image-parallax_wrap.is-3',
+        {
+          yPercent: 20,
+          ease: 'none',
+        },
+        '<'
+      );
+  });
+  // ————— HERO IMAGES PARALLAX ————— //
+
   // ————— HOMEPAGE CASE SWIPER ————— //
   let workCarouselInit = false,
     workCarousel;
@@ -49,21 +89,6 @@ window.Webflow.push(() => {
             },
           },
         });
-
-        workCarousel.slides.forEach((slide) => {
-          slide.addEventListener('mouseover', () => {
-            gsap.to(slide.querySelectorAll('img')[1], {
-              scale: 1.1,
-              duration: 0.4,
-            });
-          });
-          slide.addEventListener('mouseout', () => {
-            gsap.to(slide.querySelectorAll('img')[1], {
-              scale: 1,
-              duration: 0.4,
-            });
-          });
-        });
       }
     } else if (workCarouselInit) {
       workCarousel.destroy(true, true);
@@ -80,17 +105,20 @@ window.Webflow.push(() => {
   window.addEventListener('resize', initWorkSwiper);
   // ————— HOMEPAGE CASE SWIPER ————— //
 
-  // ————— CASE STUDY HOVER ————— //
+  // ————— CASE STUDY SCROLL INTO VIEW ————— //
   gsap.from('.work-swiper_component .work-item_component img', {
     opacity: 0,
+    duration: 0.8,
     scrollTrigger: {
       trigger: '.work-swiper_component',
-      start: 'top bottom',
+      start: 'top 95%',
       end: 'bottom top',
-      //   markers: false,
+      markers: false,
     },
   });
+  // ————— CASE STUDY SCROLL INTO VIEW ————— //
 
+  // ————— CASE STUDY HOVER ————— //
   document.querySelectorAll('.work-item_component').forEach((item) => {
     const foregroundImageWrap = item.querySelectorAll('.work-item_small-image-wrap');
     const foregroundImage = item.querySelectorAll('img')[0];
@@ -104,6 +132,7 @@ window.Webflow.push(() => {
       scale: defaultForegroundScale,
     });
 
+    // PARALLAX BACKGROUND IMAGE ON Y SCROLL
     gsap.fromTo(
       backgroundImage,
       {
@@ -117,23 +146,33 @@ window.Webflow.push(() => {
           start: 'top bottom',
           end: 'bottom top',
           scrub: true,
-          //   markers: false,
         },
       }
     );
 
+    // Initially hide all images
+    let images = item.querySelectorAll('.work-item_small-image-wrap img');
+    images.forEach((image) => {
+      gsap.set(image, { autoAlpha: 0 });
+    });
+
+    // Show the first image
+    gsap.set(images[currentIndex], { autoAlpha: 1 });
+
+    // HOVER EFFECT
     item.addEventListener('mouseover', () => {
       intervalFunction = setInterval(() => {
         gsap.to(images[currentIndex], { autoAlpha: 0, duration: 0 });
         currentIndex = (currentIndex + 1) % images.length;
         gsap.to(images[currentIndex], { autoAlpha: 1, duration: 0 });
-      }, 250);
+      }, 240);
 
       gsap
         .timeline()
         .to(foregroundImageWrap, {
-          scale: 1.02,
+          scale: 1.015,
           ease: 'power2.out',
+          duration: 0.5,
         })
         .to(
           backgroundImage,
@@ -141,18 +180,11 @@ window.Webflow.push(() => {
             overwrite: 'auto',
             filter: 'blur(10px)',
             opacity: 0.6,
+            ease: 'power1.out',
             duration: 1,
           },
           '<'
         );
-      // .to(
-      //   foregroundImage,
-      //   {
-      //     scale: 1.03,
-      //     ease: 'power2.out',
-      //   },
-      //   '<'
-      // );
     });
 
     item.addEventListener('mouseout', () => {
@@ -161,60 +193,23 @@ window.Webflow.push(() => {
         .timeline()
         .to(foregroundImageWrap, {
           scale: 1,
+          ease: 'power2.out',
+          duration: 0.4,
         })
         .to(
           backgroundImage,
           {
-            // overwrite: 'auto',
             filter: 'blur(0px)',
             opacity: 1,
-            duration: 1,
+            duration: 0.6,
           },
           '<'
         );
     });
-
-    let images = item.querySelectorAll('.work-item_small-image-wrap img');
-
-    // Initially hide all images
-    images.forEach((image) => {
-      gsap.set(image, { autoAlpha: 0 });
-    });
-
-    // Show the first image
-    gsap.set(images[currentIndex], { autoAlpha: 1 });
   });
   // ————— CASE STUDY HOVER ————— //
 
-  // ————— SPLIT TYPE ————— //
-  function splitText(element) {
-    const splitOptions = element.getAttribute('split-type');
-    return new SplitType(element, { types: splitOptions, tagName: 'span' });
-  }
-
-  //   document.querySelectorAll('[split-type]').forEach((element) => {
-  //     const splitElement = splitText(element);
-  //     console.log(splitElement);
-
-  //     gsap.from(splitElement.lines, {
-  //       y: '100%',
-  //       opacity: 0,
-  //       //   rotationZ: '5',
-  //       duration: 0.6,
-  //       ease: 'quart.out',
-  //       stagger: 0.1,
-  //       scrollTrigger: {
-  //         markers: false,
-  //         trigger: splitElement.elements,
-  //         start: 'center bottom',
-  //         toggleActions: 'play none resume reverse',
-  //       },
-  //     });
-  //   });
-  // ————— SPLIT TYPE ————— //
-
   // ————— DISCOVER ARTICLES HOVER ————— //
-
   const articlesLenght = document.querySelectorAll('.discover_list .discover_item').length;
   let articleHover = false;
 
@@ -223,7 +218,7 @@ window.Webflow.push(() => {
       gsap.to('.discover_image-list', {
         yPercent: (100 / articlesLenght) * -i,
         duration: articleHover ? 0.8 : 0,
-        ease: 'power2.inOut',
+        ease: 'power3.inOut',
         overwrite: true,
       });
       articleHover = true;
@@ -233,44 +228,5 @@ window.Webflow.push(() => {
   document.querySelector('.discover_list').addEventListener('mouseleave', () => {
     articleHover = false;
   });
-
-  const heroImages = gsap
-    .timeline({
-      scrollTrigger: {
-        markers: false,
-        trigger: '.image-parallax_component',
-        start: 'top bottom',
-        end: 'bottom top',
-        // toggleActions: 'play none resume reverse',
-        scrub: true,
-      },
-    })
-    .fromTo(
-      '.image-parallax_wrap.is-1',
-      {
-        yPercent: 0,
-        ease: 'none',
-      },
-      {
-        yPercent: -15,
-        ease: 'none',
-      },
-      '<'
-    )
-    .to(
-      '.image-parallax_wrap.is-2',
-      {
-        yPercent: 2,
-        ease: 'none',
-      },
-      '<'
-    )
-    .to(
-      '.image-parallax_wrap.is-3',
-      {
-        yPercent: 20,
-        ease: 'none',
-      },
-      '<'
-    );
+  // ————— DISCOVER ARTICLES HOVER ————— //
 });
