@@ -334,9 +334,9 @@ window.Webflow.push(() => {
           each: 0.015,
           from: 'start',
         },
-        duration: 1,
+        duration: 0.8,
         delay: 0.2,
-        ease: 'power2.inOut',
+        ease: 'power3.out',
       })
       .to(
         preloader.querySelector('.preloader_absolute'),
@@ -373,10 +373,10 @@ window.Webflow.push(() => {
           },
           stagger: {
             each: 0.015,
-            from: 'end',
+            from: 'start',
           },
-          duration: 1,
-          ease: 'power2.inOut',
+          duration: 0.8,
+          ease: 'power3.out',
           onComplete: () => {
             window.location = destination;
           },
