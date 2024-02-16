@@ -1,5 +1,5 @@
 import Swiper from 'swiper';
-import { Keyboard, Parallax } from 'swiper/modules';
+import { Keyboard, Parallax, Mousewheel } from 'swiper/modules';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -64,7 +64,7 @@ window.Webflow.push(() => {
         });
 
         workCarousel = new Swiper(`.${workCarouselClasNames[0]}`, {
-          modules: [Keyboard, Parallax],
+          modules: [Keyboard, Parallax, Mousewheel],
           wrapperClass: workCarouselClasNames[1],
           slideClass: workCarouselClasNames[2],
           direction: 'horizontal',
@@ -79,6 +79,11 @@ window.Webflow.push(() => {
           keyboard: {
             enabled: true,
             onlyInViewport: true,
+          },
+          mousewheel: {
+            enabled: true,
+            forceToAxis: true,
+            releaseOnEdges: true,
           },
           on: {
             beforeInit: function () {
