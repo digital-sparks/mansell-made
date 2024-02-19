@@ -20,7 +20,6 @@ window.Webflow.push(() => {
     return new Promise((resolve) => {
       const intervalId = setInterval(() => {
         const fontsLoaded = fontfaces.map((font) => document.fonts.check(font));
-        console.log('fonts not loaded');
         if (fontsLoaded.every((loaded) => loaded === true)) {
           clearInterval(intervalId);
           resolve();
