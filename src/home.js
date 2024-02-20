@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+console.log("test")
+
 window.Webflow ||= [];
 window.Webflow.push(() => {
   // ————— HERO IMAGES PARALLAX ————— //
