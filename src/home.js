@@ -5,8 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-console.log("test")
-
 window.Webflow ||= [];
 window.Webflow.push(() => {
   // ————— HERO IMAGES PARALLAX ————— //
@@ -107,6 +105,16 @@ window.Webflow.push(() => {
         document.querySelectorAll(`.${workCarouselClasNames[2]}`)[i].remove();
       }
     }
+    // Slide transition when enter view
+    ScrollTrigger.create({
+      trigger: ".work-swiper_wrapper",
+      start: "top center",
+      once:true,
+      onEnter:()=>{
+        workCarousel.slideNext(600, true);
+      }
+    })
+
   }
   initWorkSwiper();
   window.addEventListener('resize', initWorkSwiper);

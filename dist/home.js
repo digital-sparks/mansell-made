@@ -11407,7 +11407,6 @@
 
   // src/home.js
   gsapWithCSS.registerPlugin(ScrollTrigger2);
-  console.log("test");
   window.Webflow ||= [];
   window.Webflow.push(() => {
     let matchMedia2 = gsapWithCSS.matchMedia();
@@ -11494,6 +11493,14 @@
           document.querySelectorAll(`.${workCarouselClasNames[2]}`)[i].remove();
         }
       }
+      ScrollTrigger2.create({
+        trigger: ".work-swiper_wrapper",
+        start: "top center",
+        once: true,
+        onEnter: () => {
+          workCarousel.slideNext(600, true);
+        }
+      });
     }
     initWorkSwiper();
     window.addEventListener("resize", initWorkSwiper);
