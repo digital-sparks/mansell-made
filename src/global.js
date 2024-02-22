@@ -617,50 +617,46 @@ window.Webflow.push(() => {
   // ————— GlOBAL TITLE ANIMATION EFFECT ————— //
 
   if (document.querySelectorAll('[split-type=title]').length > 0) {
-    const titleInterval = setInterval(() => {
-      if (documents.fonts.check('16px PP Pangaia')) {
-        clearInterval(titleInterval);
-
-        document.querySelectorAll('[split-type=title]').forEach((title) => {
-          const headingText = new SplitType(title, {
-            types: 'lines, chars, words',
-            tagName: 'span',
-          });
-
-          gsap.set(headingText.chars, {
-            rotateZ: 1,
-            rotateX: 40,
-            rotateY: 20,
-            yPercent: 12,
-            transformOrigin: 'left bottom',
-            opacity: 0,
-          });
-
-          ScrollTrigger.create({
-            trigger: headingText.elements,
-            start: 'top bottom',
-            end: 'bottom top',
-            onEnter: () => {
-              gsap.to(headingText.chars, {
-                duration: 1.4,
-                rotateZ: 0,
-                rotateX: 0,
-                rotateY: 0,
-                yPercent: 0,
-                opacity: 1,
-                delay: Math.abs(
-                  ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
-                    preloaderAnimation.totalDuration()) *
-                    preloaderDelay
-                ),
-                stagger: 0.04,
-                ease: 'power1.out',
-              });
-            },
-          });
+    document.fonts.ready.then(() => {
+      document.querySelectorAll('[split-type=title]').forEach((title) => {
+        const headingText = new SplitType(title, {
+          types: 'lines, chars, words',
+          tagName: 'span',
         });
-      }
-    }, 50);
+
+        gsap.set(headingText.chars, {
+          rotateZ: 1,
+          rotateX: 40,
+          rotateY: 20,
+          yPercent: 12,
+          transformOrigin: 'left bottom',
+          opacity: 0,
+        });
+
+        ScrollTrigger.create({
+          trigger: headingText.elements,
+          start: 'top bottom',
+          end: 'bottom top',
+          onEnter: () => {
+            gsap.to(headingText.chars, {
+              duration: 1.4,
+              rotateZ: 0,
+              rotateX: 0,
+              rotateY: 0,
+              yPercent: 0,
+              opacity: 1,
+              delay: Math.abs(
+                ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
+                  preloaderAnimation.totalDuration()) *
+                  preloaderDelay
+              ),
+              stagger: 0.04,
+              ease: 'power1.out',
+            });
+          },
+        });
+      });
+    });
   }
   // ————— GlOBAL TITLE ANIMATION EFFECT ————— //
 
@@ -702,41 +698,37 @@ window.Webflow.push(() => {
   // ————— GlOBAL SUBTITLE ANIMATION EFFECT ————— //
 
   if (document.querySelectorAll('[split-type=subtitle]').length > 0) {
-    const subtitleInterval = setInterval(() => {
-      if (documents.fonts.check('16px GT America')) {
-        clearInterval(subtitleInterval);
+    document.fonts.ready.then(() => {
+      document.querySelectorAll('[split-type=subtitle]').forEach((element) => {
+        const subheading = new SplitType(element, { types: 'lines', tagName: 'span' });
 
-        document.querySelectorAll('[split-type=subtitle]').forEach((element) => {
-          const subheading = new SplitType(element, { types: 'lines', tagName: 'span' });
-
-          gsap.set(subheading.lines, {
-            yPercent: 50,
-            opacity: 0,
-            rotationZ: 1,
-          });
-
-          ScrollTrigger.create({
-            trigger: subheading.elements,
-            start: 'bottom bottom',
-            onEnter: () => {
-              gsap.to(subheading.lines, {
-                yPercent: 0,
-                opacity: 1,
-                rotationZ: 0,
-                duration: 1,
-                delay: Math.abs(
-                  ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
-                    preloaderAnimation.totalDuration()) *
-                    preloaderDelay
-                ),
-                ease: 'quart.out',
-                stagger: 0.15,
-              });
-            },
-          });
+        gsap.set(subheading.lines, {
+          yPercent: 50,
+          opacity: 0,
+          rotationZ: 1,
         });
-      }
-    }, 50);
+
+        ScrollTrigger.create({
+          trigger: subheading.elements,
+          start: 'bottom bottom',
+          onEnter: () => {
+            gsap.to(subheading.lines, {
+              yPercent: 0,
+              opacity: 1,
+              rotationZ: 0,
+              duration: 1,
+              delay: Math.abs(
+                ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
+                  preloaderAnimation.totalDuration()) *
+                  preloaderDelay
+              ),
+              ease: 'quart.out',
+              stagger: 0.15,
+            });
+          },
+        });
+      });
+    });
   }
   // ————— GlOBAL SUBTITLE ANIMATION EFFECT ————— //
 
