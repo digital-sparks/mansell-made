@@ -821,67 +821,69 @@ window.Webflow.push(() => {
 
   // ————— QUOTE COMPONENT ANIMATION ————— //
   document.querySelectorAll('.quote_component').forEach((element) => {
-    const backgroundOverlay = element.querySelector('.overlay-full'),
-      blockquote = splitText(element.querySelector('blockquote')),
-      author = element.querySelector('[data-name=author]'),
-      role = element.querySelector('[data-name=role]'),
-      company = element.querySelector('[data-name=company]');
+    document.fonts.ready.then(() => {
+      const backgroundOverlay = element.querySelector('.overlay-full'),
+        blockquote = splitText(element.querySelector('blockquote')),
+        author = element.querySelector('[data-name=author]'),
+        role = element.querySelector('[data-name=role]'),
+        company = element.querySelector('[data-name=company]');
 
-    gsap.set(backgroundOverlay, {
-      bottom: '100%',
-    });
-    gsap.set(blockquote.lines, {
-      y: '75%',
-      opacity: 0,
-      rotationZ: 1,
-    });
-    gsap.set([author, role, company], {
-      opacity: 0,
-      yPercent: 10,
-    });
+      gsap.set(backgroundOverlay, {
+        bottom: '100%',
+      });
+      gsap.set(blockquote.lines, {
+        y: '75%',
+        opacity: 0,
+        rotationZ: 1,
+      });
+      gsap.set([author, role, company], {
+        opacity: 0,
+        yPercent: 10,
+      });
 
-    ScrollTrigger.create({
-      markers: false,
-      trigger: element,
-      start: 'center bottom',
-      toggleActions: 'play none resume reverse',
-      onEnter: () => {
-        gsap
-          .timeline()
-          .to(backgroundOverlay, {
-            delay: Math.abs(
-              ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
-                preloaderAnimation.totalDuration()) *
-                preloaderDelay
-            ),
-            bottom: '0%',
-            duration: 1.4,
-            ease: 'quart.out',
-          })
-          .to(
-            blockquote.lines,
-            {
-              delay: 0.2,
-              y: '0%',
-              opacity: 1,
-              rotationZ: 0,
-              duration: 1.2,
-              ease: 'back.out',
-              stagger: 0.1,
-            },
-            '<+0.2'
-          )
-          .to(
-            [author, role, company],
-            {
-              opacity: 1,
-              yPercent: 0,
-              stagger: 0.05,
-              duration: 1.2,
-            },
-            '<+0.5'
-          );
-      },
+      ScrollTrigger.create({
+        markers: false,
+        trigger: element,
+        start: 'center bottom',
+        toggleActions: 'play none resume reverse',
+        onEnter: () => {
+          gsap
+            .timeline()
+            .to(backgroundOverlay, {
+              delay: Math.abs(
+                ((preloaderAnimation.totalDuration() - preloaderAnimation.totalTime()) /
+                  preloaderAnimation.totalDuration()) *
+                  preloaderDelay
+              ),
+              bottom: '0%',
+              duration: 1.4,
+              ease: 'quart.out',
+            })
+            .to(
+              blockquote.lines,
+              {
+                delay: 0.2,
+                y: '0%',
+                opacity: 1,
+                rotationZ: 0,
+                duration: 1.2,
+                ease: 'back.out',
+                stagger: 0.1,
+              },
+              '<+0.2'
+            )
+            .to(
+              [author, role, company],
+              {
+                opacity: 1,
+                yPercent: 0,
+                stagger: 0.05,
+                duration: 1.2,
+              },
+              '<+0.5'
+            );
+        },
+      });
     });
   });
   // ————— QUOTE COMPONENT ANIMATION ————— //
