@@ -1088,45 +1088,47 @@ window.Webflow.push(() => {
   // ————— NAV MENU ————— //
 
   // hover effect for the main navlinks inside the menu
-  document.querySelectorAll('.nav_open-link').forEach((navLink) => {
-    const horizontalLineLeft = navLink.previousSibling;
-    const horizontalLineRight = navLink.nextSibling;
-    const text = new SplitType(navLink, {
-      types: 'chars',
-      tagName: 'span',
-    });
-
-    gsap.set([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
-
-    navLink.addEventListener('mouseenter', () => {
-      gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 1 });
-      gsap.to(text.chars, {
-        duration: 0.2,
-        ease: 'ease.out',
-        xPercent: (index, target, targets) => {
-          let centerIndex = Math.floor(targets.length / 2);
-          let movePercentage;
-          const percentage = 2;
-
-          if (index < centerIndex) {
-            movePercentage = -percentage * Math.abs(index - centerIndex);
-          } else if (index > centerIndex) {
-            movePercentage = percentage * Math.abs(index - centerIndex);
-          } else {
-            movePercentage = 0;
-          }
-
-          return movePercentage;
-        },
+  if(window.innerWidth > 767){
+    document.querySelectorAll('.nav_open-link').forEach((navLink) => {
+      const horizontalLineLeft = navLink.previousSibling;
+      const horizontalLineRight = navLink.nextSibling;
+      const text = new SplitType(navLink, {
+        types: 'chars',
+        tagName: 'span',
+      });
+  
+      gsap.set([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
+  
+      navLink.addEventListener('mouseenter', () => {
+        gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 1 });
+        gsap.to(text.chars, {
+          duration: 0.2,
+          ease: 'ease.out',
+          xPercent: (index, target, targets) => {
+            let centerIndex = Math.floor(targets.length / 2);
+            let movePercentage;
+            const percentage = 2;
+  
+            if (index < centerIndex) {
+              movePercentage = -percentage * Math.abs(index - centerIndex);
+            } else if (index > centerIndex) {
+              movePercentage = percentage * Math.abs(index - centerIndex);
+            } else {
+              movePercentage = 0;
+            }
+  
+            return movePercentage;
+          },
+        });
+      });
+      navLink.addEventListener('mouseleave', () => {
+        gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
+        gsap.to(text.chars, {
+          xPercent: 0,
+        });
       });
     });
-    navLink.addEventListener('mouseleave', () => {
-      gsap.to([horizontalLineLeft, horizontalLineRight], { scaleX: 0 });
-      gsap.to(text.chars, {
-        xPercent: 0,
-      });
-    });
-  });
+  }
 
   // open nav_menu
   let menuAnimation = gsap.timeline({});
